@@ -1,0 +1,131 @@
+-- phpMyAdmin SQL Dump
+-- version 4.5.2
+-- http://www.phpmyadmin.net
+--
+-- Host: 127.0.0.1
+-- Generation Time: Aug 16, 2017 at 06:42 AM
+-- Server version: 5.7.9
+-- PHP Version: 5.6.16
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `db_supermarket`
+--
+CREATE DATABASE IF NOT EXISTS `db_supermarket` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `db_supermarket`;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `customer`
+--
+
+DROP TABLE IF EXISTS `customer`;
+CREATE TABLE IF NOT EXISTS `customer` (
+  `CUSTOMER_ID` varchar(20) NOT NULL,
+  `CUSTOMER_GENDER` enum('Male','Female') DEFAULT NULL,
+  `CUSTOMER_NIC` varchar(10) DEFAULT NULL,
+  `CUSTOMER_FIRST_NAME` varchar(100) NOT NULL,
+  `CUSTOMER_MIDDLE_NAME` varchar(200) DEFAULT NULL,
+  `CUSTOMER_LAST_NAME` varchar(200) DEFAULT NULL,
+  `CUSTOMER_EMAIL` varchar(50) DEFAULT NULL,
+  `CUSTOMER_ADDRESS_LINE1` varchar(100) DEFAULT NULL,
+  `CUSTOMER_ADDRESS_LINE2` varchar(100) DEFAULT NULL,
+  `CUSTOMER_ADDRESS_CITY` varchar(30) DEFAULT NULL,
+  `CUSTOMER_POSTALCODE` varchar(6) DEFAULT NULL,
+  `CUSTOMER_LOYALTY_POINTS` int(11) DEFAULT NULL,
+  `CUSTOMER_CONTACT_TEL` varchar(10) DEFAULT NULL,
+  `CUSTOMER_CONTACT_MOBILE` varchar(10) DEFAULT NULL,
+  PRIMARY KEY (`CUSTOMER_ID`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `customer`
+--
+
+INSERT INTO `customer` (`CUSTOMER_ID`, `CUSTOMER_GENDER`, `CUSTOMER_NIC`, `CUSTOMER_FIRST_NAME`, `CUSTOMER_MIDDLE_NAME`, `CUSTOMER_LAST_NAME`, `CUSTOMER_EMAIL`, `CUSTOMER_ADDRESS_LINE1`, `CUSTOMER_ADDRESS_LINE2`, `CUSTOMER_ADDRESS_CITY`, `CUSTOMER_POSTALCODE`, `CUSTOMER_LOYALTY_POINTS`, `CUSTOMER_CONTACT_TEL`, `CUSTOMER_CONTACT_MOBILE`) VALUES
+('A0000001', 'Male', '892572695V', 'Sam', NULL, 'Tarly', 'sam132@yahoo.com', '54/C', 'Temple road', 'Colombo 03', NULL, 1, '0112596483', '0715689945'),
+('A0000002', 'Female', '987536895V', 'Nimesha', NULL, 'Perera', 'nimesha_perera@hotmail.com', '345/11', 'Peradeniya road', 'Kandy', NULL, 0, '0814556988', '0774589687'),
+('A0000003', 'Female', '782345385V', 'Himali', 'Kumudu', 'Abeykoon', NULL, '67/A', 'St.Micheals road', 'Gampaha', NULL, NULL, NULL, NULL),
+('A0000004', 'Male', '954050873V', 'Supun', 'Peter', 'Gunaratne', 'gunar95@gmail.com', '34', 'Anderson Flats', 'Wellawatte', NULL, 10, '011567344', '0757834521');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `invoice`
+--
+
+DROP TABLE IF EXISTS `invoice`;
+CREATE TABLE IF NOT EXISTS `invoice` (
+  `INVOICE_ID` varchar(20) NOT NULL,
+  `PRODUCT_ID` varchar(20) DEFAULT NULL,
+  `INVOICE_DATE` date DEFAULT NULL,
+  `SUPERMARKET_ID` varchar(10) DEFAULT NULL,
+  `CUSTOMER_ID` varchar(20) DEFAULT NULL,
+  `INVOICE_PAYMENT_METHOD` enum('Cash','VisaCard','MasterCard') DEFAULT NULL,
+  `EMP_ID` varchar(20) DEFAULT NULL,
+  `INVOICE_TIME` time DEFAULT NULL,
+  PRIMARY KEY (`INVOICE_ID`),
+  KEY `SUPERMARKET_ID` (`SUPERMARKET_ID`),
+  KEY `CUSTOMER_ID` (`CUSTOMER_ID`),
+  KEY `PRODUCT_ID` (`PRODUCT_ID`),
+  KEY `EMP_ID` (`EMP_ID`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `invoice`
+--
+
+INSERT INTO `invoice` (`INVOICE_ID`, `PRODUCT_ID`, `INVOICE_DATE`, `SUPERMARKET_ID`, `CUSTOMER_ID`, `INVOICE_PAYMENT_METHOD`, `EMP_ID`, `INVOICE_TIME`) VALUES
+('1027', '228Y0C12', '2017-08-23', 'C12', '00000000', 'Cash', 'E01208', '07:37:33'),
+('1032', '298X0C12', '2017-08-18', 'C12', 'A0000001', 'Cash', 'E00120', '07:24:00'),
+('1045', '674a0C12', '2017-08-03', 'C12', 'A0000004', 'MasterCard', 'E00221', '20:19:00'),
+('1054', '675c0C12', '2017-08-01', 'C13', '00', 'Cash', 'E00021', '13:26:32'),
+('1055', '223Y0C12', '2017-08-26', 'C12', '00000000', 'VisaCard', 'E00034', '09:39:36');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `product`
+--
+
+DROP TABLE IF EXISTS `product`;
+CREATE TABLE IF NOT EXISTS `product` (
+  `PRODUCT_ID` varchar(20) NOT NULL,
+  `PRODUCT_NAME` varchar(200) NOT NULL,
+  `PRODUCT_COMPANY_BARCODE` varchar(100) DEFAULT NULL,
+  `BATCH_ID` varchar(100) DEFAULT NULL,
+  `CATEGORY_ID` varchar(20) DEFAULT NULL,
+  `SUPPLIER_ID` varchar(20) DEFAULT NULL,
+  `SUPERMARKET_ID` varchar(10) DEFAULT NULL,
+  `PRODUCT_STATUS` tinyint(1) DEFAULT '1',
+  `PRODUCT_UNIT_PRICE` double(12,2) DEFAULT NULL,
+  `PRODUCT_UNIT` enum('kg','g','unit','mg','m','l','ml') DEFAULT NULL,
+  `PRODUCT_QTY_PER_UNIT` double(16,6) DEFAULT NULL,
+  `PRODUCT_IS_FOOD` tinyint(1) DEFAULT '0',
+  `PRODUCT_EXP` date DEFAULT NULL,
+  PRIMARY KEY (`PRODUCT_ID`),
+  KEY `SUPERMARKET_ID` (`SUPERMARKET_ID`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `product`
+--
+
+INSERT INTO `product` (`PRODUCT_ID`, `PRODUCT_NAME`, `PRODUCT_COMPANY_BARCODE`, `BATCH_ID`, `CATEGORY_ID`, `SUPPLIER_ID`, `SUPERMARKET_ID`, `PRODUCT_STATUS`, `PRODUCT_UNIT_PRICE`, `PRODUCT_UNIT`, `PRODUCT_QTY_PER_UNIT`, `PRODUCT_IS_FOOD`, `PRODUCT_EXP`) VALUES
+('298X0C12', 'Prem_CorectionFluid', '6950126101980', 'SP301M', 'LX901', 'S070', 'C12', 0, 75.00, 'unit', NULL, 0, NULL),
+('228Y0C12', 'ARPICO_CRBOOK_80', '4796002050391', 'PLU42378', 'PX234', 'S001', 'C12', 1, 84.00, 'unit', NULL, 0, NULL),
+('876X0C12', 'FileClipPlstic', '4792015132502', 'PLU13270', NULL, 'S000', 'C12', 0, 125.00, 'unit', NULL, 0, NULL),
+('674a0C12', 'Green Apples Bulk', '336148', '7019', NULL, 'S009', 'C12', 1, 56.00, 'g', 10.000000, 1, NULL);
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
